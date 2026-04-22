@@ -47,7 +47,7 @@ const Header = () => {
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
         <a href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src="/logo.png" alt="Logo" style={{ height: '32px', width: 'auto', borderRadius: '4px' }} />
-          <span>maicomaceira<span style={{ color: 'var(--accent)', fontStyle: 'italic' }}>.pro</span></span>
+          <span>maicomaceira<span style={{ color: '#c9a84c', fontStyle: 'italic', fontWeight: 700 }}>.pro</span></span>
         </a>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
