@@ -151,11 +151,11 @@ const AdminPanel = () => {
                   color: 'var(--text)'
                 }}
               >
-                <option value="Portrait">Portrait</option>
-                <option value="Landscape">Landscape</option>
-                <option value="Web Res">Web Res</option>
-                <option value="High Res">High Res</option>
-                <option value="4K">4K</option>
+                <option value="Portrait" style={{ background: 'var(--bg)', color: 'var(--text)' }}>Portrait</option>
+                <option value="Landscape" style={{ background: 'var(--bg)', color: 'var(--text)' }}>Landscape</option>
+                <option value="Web Res" style={{ background: 'var(--bg)', color: 'var(--text)' }}>Web Res</option>
+                <option value="High Res" style={{ background: 'var(--bg)', color: 'var(--text)' }}>High Res</option>
+                <option value="4K" style={{ background: 'var(--bg)', color: 'var(--text)' }}>4K</option>
               </select>
             </div>
 
