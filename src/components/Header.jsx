@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../constants/translations';
 import { Sun, Moon, Globe, Menu, X } from 'lucide-react';
@@ -6,12 +6,44 @@ import { Sun, Moon, Globe, Menu, X } from 'lucide-react';
 const Header = () => {
   const { theme, lang, toggleTheme, toggleLang } = useAppContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const t = translations[lang].nav;
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  useEffect(() => {
+    let timeoutId;
+    
+    const handleMouseMove = () => {
+      setIsVisible(true);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+    };
+
+    // Initialize the timer
+    timeoutId = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <header className="header">
+    <header 
+      className={`header ${!isVisible ? 'header-hidden' : ''}`}
+      style={{
+        transform: isVisible ? 'translateX(-50%)' : 'translate(-50%, -150px)',
+        opacity: isVisible ? 1 : 0,
+        pointerEvents: isVisible ? 'auto' : 'none'
+      }}
+    >
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
         <a href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src="/logo.png" alt="Logo" style={{ height: '32px', width: 'auto', borderRadius: '4px' }} />

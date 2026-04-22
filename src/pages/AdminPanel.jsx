@@ -74,7 +74,7 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="admin-dashboard" style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', minHeight: '100vh' }}>
+    <div className="admin-dashboard" style={{ padding: '120px 20px 40px', maxWidth: '1200px', margin: '0 auto', minHeight: '100vh' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
         <div>
           <h1 style={{ fontFamily: '"Playfair Display", serif', fontSize: '2.5rem' }}>Dashboard</h1>
