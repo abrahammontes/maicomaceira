@@ -1,10 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
+let supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder';
 
-if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-  console.error('🚨 ATENCIÓN: Faltan las variables de entorno de Supabase (VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY). La aplicación no podrá cargar datos. Configúralas en Vercel.');
+// Fix URL if user forgot https://
+if (supabaseUrl && !supabaseUrl.startsWith('http')) {
+  supabaseUrl = `https://${supabaseUrl}`;
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+  console.error('🚨 ATENCIÓN: Faltan las variables de entorno de Supabase.');
+}
+
+export let supabase;
+
+try {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+} catch (e) {
+  console.error('Failed to initialize Supabase client:', e);
+  // Fallback so the app doesn't crash
+  supabase = createClient('https://placeholder.supabase.co', 'placeholder');
+}
