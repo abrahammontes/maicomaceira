@@ -261,11 +261,11 @@ const AdminPanel = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '20px' }}>
             {images.map((img) => (
-              <div key={img.id} style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', aspectRatio: '1' }}>
+              <div key={img.id} style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', aspectRatio: '1', background: 'rgba(0,0,0,0.3)' }}>
                 <img 
                   src={img.publicUrl} 
                   alt={img.description} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', filter: editingImageId === img.id ? 'brightness(0.3)' : 'none' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: editingImageId === img.id ? 'brightness(0.3)' : 'none' }}
                 />
                 
                 {editingImageId === img.id ? (

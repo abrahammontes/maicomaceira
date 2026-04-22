@@ -63,8 +63,8 @@ const Gallery = () => {
       </div>
 
       <div className="gallery-grid">
-        {filteredImages.map((item, index) => (
-          <div key={item.id} className={`gallery-item ${index % 3 === 0 ? 'span-12' : index % 2 === 0 ? 'span-8' : 'span-4'}`}>
+        {filteredImages.map((item) => (
+          <div key={item.id} className="gallery-item">
             <img 
               src={item.publicUrl || item.filename} 
               alt={item.description} 
