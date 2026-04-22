@@ -99,5 +99,16 @@ export const apiService = {
 
     if (dbError) throw dbError;
     return { success: true };
+  },
+
+  async updateImageDescription(id, description) {
+    const { data, error } = await supabase
+      .from('images')
+      .update({ description })
+      .match({ id })
+      .select();
+
+    if (error) throw error;
+    return data[0];
   }
 };

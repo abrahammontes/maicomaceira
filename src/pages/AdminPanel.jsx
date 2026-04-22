@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
-import { Upload, Trash2, LogOut, Image as ImageIcon, CheckCircle, User } from 'lucide-react';
+import { Upload, Trash2, LogOut, Image as ImageIcon, CheckCircle, User, Edit2, Check, X } from 'lucide-react';
 
 const AdminPanel = () => {
   const [images, setImages] = useState([]);
@@ -11,6 +11,8 @@ const AdminPanel = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [editingImageId, setEditingImageId] = useState(null);
+  const [editDescription, setEditDescription] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,6 +72,31 @@ const AdminPanel = () => {
     if (window.confirm('¿Estás seguro de eliminar esta foto?')) {
       await apiService.deleteImage(id, filename);
       fetchImages();
+    }
+  };
+
+  const handleEditClick = (img) => {
+    setEditingImageId(img.id);
+    setEditDescription(img.description || '');
+  };
+
+  const handleCancelEdit = () => {
+    setEditingImageId(null);
+    setEditDescription('');
+  };
+
+  const handleSaveEdit = async (id) => {
+    setLoading(true);
+    try {
+      await apiService.updateImageDescription(id, editDescription);
+      setMessage('Descripción actualizada');
+      setEditingImageId(null);
+      fetchImages();
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      setMessage('Error al actualizar descripción');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -215,36 +242,64 @@ const AdminPanel = () => {
                 <img 
                   src={img.publicUrl} 
                   alt={img.description} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', filter: editingImageId === img.id ? 'brightness(0.3)' : 'none' }}
                 />
-                <button 
-                  onClick={() => handleDelete(img.id, img.filename)}
-                  style={{ 
-                    position: 'absolute', 
-                    top: '5px', 
-                    right: '5px', 
-                    background: 'rgba(255,0,0,0.7)', 
-                    border: 'none', 
-                    borderRadius: '5px', 
-                    padding: '5px', 
-                    cursor: 'pointer',
-                    color: 'white'
-                  }}
-                >
-                  <Trash2 size={14} />
-                </button>
-                <div style={{ 
-                  position: 'absolute', 
-                  bottom: 0, 
-                  left: 0, 
-                  right: 0, 
-                  background: 'rgba(0,0,0,0.5)', 
-                  padding: '5px', 
-                  fontSize: '0.7rem',
-                  color: 'white'
-                }}>
-                  {img.resolution}
-                </div>
+                
+                {editingImageId === img.id ? (
+                  <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', padding: '15px', background: 'rgba(0,0,0,0.6)' }}>
+                    <textarea 
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      placeholder="Nueva descripción..."
+                      style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '5px', padding: '10px', resize: 'none', marginBottom: '10px', fontSize: '0.8rem' }}
+                    />
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <button onClick={() => handleSaveEdit(img.id)} style={{ flex: 1, background: '#4ade80', color: 'black', border: 'none', borderRadius: '5px', padding: '8px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }} title="Guardar">
+                        <Check size={16} />
+                      </button>
+                      <button onClick={handleCancelEdit} style={{ flex: 1, background: '#f87171', color: 'white', border: 'none', borderRadius: '5px', padding: '8px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }} title="Cancelar">
+                        <X size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '5px' }}>
+                      <button 
+                        onClick={() => handleEditClick(img)}
+                        style={{ background: 'rgba(0,0,0,0.7)', border: 'none', borderRadius: '5px', padding: '5px', cursor: 'pointer', color: 'white' }}
+                        title="Editar descripción"
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(img.id, img.filename)}
+                        style={{ background: 'rgba(255,0,0,0.7)', border: 'none', borderRadius: '5px', padding: '5px', cursor: 'pointer', color: 'white' }}
+                        title="Eliminar foto"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                    <div style={{ 
+                      position: 'absolute', 
+                      bottom: 0, 
+                      left: 0, 
+                      right: 0, 
+                      background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', 
+                      padding: '25px 10px 10px', 
+                      fontSize: '0.75rem',
+                      color: 'white',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px'
+                    }}>
+                      <div style={{ fontWeight: 'bold' }}>{img.resolution}</div>
+                      <div style={{ opacity: 0.8, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {img.description || 'Sin descripción'}
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
