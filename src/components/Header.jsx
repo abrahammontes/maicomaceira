@@ -10,7 +10,10 @@ const Header = () => {
   return (
     <header className="header">
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-        <a href="/" className="logo">maicomaceira</a>
+        <a href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/logo.png" alt="Logo" style={{ height: '32px', width: 'auto', borderRadius: '4px' }} />
+          <span>maicomaceira</span>
+        </a>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
           <nav className="nav-links">
