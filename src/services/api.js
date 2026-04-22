@@ -26,6 +26,15 @@ export const apiService = {
     return localStorage.getItem('adminToken');
   },
 
+  async getUser() {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
+    return user;
+  },
+
   // --- IMAGES ---
   async getImages() {
     const { data, error } = await supabase

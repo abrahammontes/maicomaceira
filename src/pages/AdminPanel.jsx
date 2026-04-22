@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
-import { Upload, Trash2, LogOut, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { Upload, Trash2, LogOut, Image as ImageIcon, CheckCircle, User } from 'lucide-react';
 
 const AdminPanel = () => {
   const [images, setImages] = useState([]);
@@ -10,15 +10,26 @@ const AdminPanel = () => {
   const [resolution, setResolution] = useState('High Res');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = apiService.getToken();
-    if (!token) {
-      navigate('/login');
-    } else {
-      fetchImages();
-    }
+    const checkUser = async () => {
+      const token = apiService.getToken();
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+      
+      const user = await apiService.getUser();
+      if (user) {
+        setUserEmail(user.email);
+        fetchImages();
+      } else {
+        navigate('/login');
+      }
+    };
+    checkUser();
   }, [navigate]);
 
   const fetchImages = async () => {
@@ -69,9 +80,35 @@ const AdminPanel = () => {
           <h1 style={{ fontFamily: '"Playfair Display", serif', fontSize: '2.5rem' }}>Dashboard</h1>
           <p style={{ color: 'var(--text-muted)' }}>Gestiona tu portafolio fotográfico</p>
         </div>
-        <button onClick={handleLogout} className="control-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px' }}>
-          <LogOut size={18} /> Salir
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          {userEmail && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '0.9rem', background: 'rgba(255, 255, 255, 0.05)', padding: '8px 15px', borderRadius: '20px' }}>
+              <User size={16} />
+              {userEmail}
+            </div>
+          )}
+          <button 
+            onClick={handleLogout} 
+            className="control-btn" 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              padding: '8px 16px', 
+              background: 'rgba(255, 0, 0, 0.1)', 
+              color: '#ff4d4d', 
+              border: '1px solid rgba(255, 0, 0, 0.2)', 
+              borderRadius: '8px', 
+              cursor: 'pointer', 
+              transition: 'all 0.2s',
+              fontWeight: '500'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 0, 0, 0.2)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255, 0, 0, 0.1)'}
+          >
+            <LogOut size={16} /> Salir
+          </button>
+        </div>
       </header>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '30px' }}>
