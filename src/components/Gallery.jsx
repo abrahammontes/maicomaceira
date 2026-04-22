@@ -46,14 +46,15 @@ const Gallery = () => {
             key={cat}
             onClick={() => setSelectedCategory(cat)}
             style={{
-              background: selectedCategory === cat ? 'var(--accent)' : 'transparent',
-              color: selectedCategory === cat ? 'white' : 'var(--text)',
-              border: `1px solid ${selectedCategory === cat ? 'var(--accent)' : 'rgba(255,255,255,0.2)'}`,
+              background: selectedCategory === cat ? 'var(--accent)' : 'var(--bg)',
+              color: selectedCategory === cat ? '#ffffff' : 'var(--text)',
+              border: `1px solid ${selectedCategory === cat ? 'var(--accent)' : 'var(--border)'}`,
               padding: '8px 20px',
               borderRadius: '20px',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              fontSize: '0.9rem'
+              fontSize: '0.9rem',
+              boxShadow: selectedCategory !== cat ? '0 2px 8px rgba(0,0,0,0.1)' : 'none'
             }}
           >
             {cat}
