@@ -10,7 +10,7 @@ const Hero = () => {
     <section className="hero">
       <div className="hero-background-image"></div>
       <div className="hero-overlay"></div>
-      <div className="hero-content">
+      <div className="hero-content" style={{ marginBottom: '20vh' }}>
         <p className="hero-subtitle">{t.subtitle}</p>
         <h1 className="hero-title">Maico Maceira</h1>
       </div>
