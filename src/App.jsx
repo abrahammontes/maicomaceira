@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Background from './components/Background';
 import { useAppContext } from './context/AppContext';
 import { translations } from './constants/translations';
-import { Camera, Globe, Mail } from 'lucide-react';
+import { Camera, Globe, Mail, AlertTriangle } from 'lucide-react';
 
 import Home from './pages/Home';
 import LoginPage from './pages/LoginPage';
@@ -13,9 +13,17 @@ import AdminPanel from './pages/AdminPanel';
 function App() {
   const { lang, theme } = useAppContext();
   const t = translations[lang].footer;
+  
+  const isMissingEnvVars = !import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   return (
     <div className={`App ${theme}`}>
+      {isMissingEnvVars && (
+        <div style={{ background: '#ef4444', color: 'white', padding: '12px', textAlign: 'center', fontWeight: '500', zIndex: 9999, position: 'relative', fontSize: '14px' }}>
+          <AlertTriangle size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '8px', marginBottom: '2px' }}/>
+          Error de configuración: Faltan las variables <strong>VITE_SUPABASE_URL</strong> y <strong>VITE_SUPABASE_ANON_KEY</strong> en Vercel.
+        </div>
+      )}
       <Background />
       <Header />
       
