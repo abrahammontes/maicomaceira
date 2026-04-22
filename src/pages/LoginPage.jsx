@@ -4,7 +4,7 @@ import { apiService } from '../services/api';
 import { Lock, User, AlertCircle } from 'lucide-react';
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,14 +16,14 @@ const LoginPage = () => {
     setError('');
     
     try {
-      const data = await apiService.login(username, password);
-      if (data.token) {
+      const data = await apiService.login(email, password);
+      if (data.session || data.user) {
         navigate('/admin');
       } else {
-        setError(data.message || 'Error de autenticación');
+        setError('Error de autenticación');
       }
     } catch (err) {
-      setError('Error al conectar con el servidor');
+      setError(err.message || 'Error al conectar con Supabase');
     } finally {
       setLoading(false);
     }
@@ -81,13 +81,14 @@ const LoginPage = () => {
 
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Username</label>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Email</label>
             <div style={{ position: 'relative' }}>
               <User size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
               <input 
-                type="text" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@ejemplo.com"
                 required
                 style={{ 
                   width: '100%', 

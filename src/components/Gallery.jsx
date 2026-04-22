@@ -22,11 +22,9 @@ const Gallery = () => {
   const fetchImages = async () => {
     try {
       const data = await apiService.getImages();
-      if (data && data.length > 0) {
-        setImages(data);
-      } else {
-        setImages(staticItems);
-      }
+      // Combine static items with DB items, prioritizing DB items
+      const dynamicItems = (data && data.length > 0) ? data : [];
+      setImages([...staticItems, ...dynamicItems]);
     } catch (err) {
       console.error('API Error, using fallback static items');
       setImages(staticItems);
@@ -39,7 +37,7 @@ const Gallery = () => {
         {images.map((item, index) => (
           <div key={item.id} className={`gallery-item ${index % 3 === 0 ? 'span-12' : index % 2 === 0 ? 'span-8' : 'span-4'}`}>
             <img 
-              src={item.filename.startsWith('/') ? item.filename : `http://localhost:5000/uploads/${item.filename}`} 
+              src={item.publicUrl || item.filename} 
               alt={item.description} 
               loading="lazy" 
             />

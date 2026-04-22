@@ -1,16 +1,40 @@
-# React + Vite
+# Maico Maceira Portfolio 📸
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portafolio fotográfico profesional construido con React, Vite y Supabase. Diseñado para ser elegante, rápido y fácil de gestionar.
 
-Currently, two official plugins are available:
+## Características
+- **Galería Dinámica:** Sistema de gestión de fotos integrado con Supabase.
+- **Panel de Administración:** Sube, edita y elimina fotografías de forma segura.
+- **Diseño Premium:** Estética minimalista con efectos de cristal (glassmorphism) y animaciones suaves.
+- **Multi-idioma:** Soporte para Español e Inglés.
+- **Optimizado para Vercel:** Configuración lista para despliegue serverless.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologías
+- **Frontend:** React 19 + Vite
+- **Estilos:** Vanilla CSS con variables modernas
+- **Backend:** Supabase (Auth, Database, Storage)
+- **Iconos:** Lucide React
 
-## React Compiler
+## Configuración Local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
 
-## Expanding the ESLint configuration
+2. **Configurar Variables de Entorno:**
+   Crea un archivo `.env` basado en `.env.example` con tus credenciales de Supabase.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3. **Ejecutar en desarrollo:**
+   ```bash
+   npm run dev
+   ```
+
+## Despliegue
+
+Este proyecto está configurado para desplegarse en **Vercel**. 
+Recuerda configurar las variables de entorno `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` en el panel de Vercel.
+
+---
+
+Desarrollado con ❤️ para Maico Maceira.

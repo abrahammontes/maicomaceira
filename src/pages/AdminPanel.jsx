@@ -40,28 +40,24 @@ const AdminPanel = () => {
     if (!file) return;
 
     setLoading(true);
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('description', description);
-    formData.append('resolution', resolution);
-
     try {
-      await apiService.uploadImage(formData);
+      await apiService.uploadImage(file, description, resolution);
       setMessage('Imagen subida con éxito');
       setFile(null);
       setDescription('');
       fetchImages();
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
+      console.error(err);
       setMessage('Error al subir imagen');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, filename) => {
     if (window.confirm('¿Estás seguro de eliminar esta foto?')) {
-      await apiService.deleteImage(id);
+      await apiService.deleteImage(id, filename);
       fetchImages();
     }
   };
@@ -180,12 +176,12 @@ const AdminPanel = () => {
             {images.map((img) => (
               <div key={img.id} style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', aspectRatio: '1' }}>
                 <img 
-                  src={`http://localhost:5000/uploads/${img.filename}`} 
+                  src={img.publicUrl} 
                   alt={img.description} 
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <button 
-                  onClick={() => handleDelete(img.id)}
+                  onClick={() => handleDelete(img.id, img.filename)}
                   style={{ 
                     position: 'absolute', 
                     top: '5px', 

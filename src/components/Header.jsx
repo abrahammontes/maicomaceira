@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../constants/translations';
-import { Sun, Moon, Globe } from 'lucide-react';
+import { Sun, Moon, Globe, Menu, X } from 'lucide-react';
 
 const Header = () => {
   const { theme, lang, toggleTheme, toggleLang } = useAppContext();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = translations[lang].nav;
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <header className="header">
@@ -15,11 +18,11 @@ const Header = () => {
           <span>maicomaceira</span>
         </a>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
-          <nav className="nav-links">
-            <a href="#gallery" className="nav-link">{t.portfolio}</a>
-            <a href="#about" className="nav-link">{t.bio}</a>
-            <a href="#contact" className="nav-link">{t.contact}</a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <nav className={`nav-links ${isMenuOpen ? 'mobile-open' : ''}`}>
+            <a href="#gallery" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.portfolio}</a>
+            <a href="#about" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.bio}</a>
+            <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.contact}</a>
           </nav>
 
           <div className="controls">
@@ -28,6 +31,9 @@ const Header = () => {
             </button>
             <button className="control-btn" onClick={toggleTheme}>
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+            <button className="menu-toggle" onClick={toggleMenu}>
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
