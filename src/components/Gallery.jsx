@@ -7,12 +7,13 @@ const Gallery = () => {
   const { lang } = useAppContext();
   const t = translations[lang].gallery.items;
   const [images, setImages] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('Todas');
 
   const staticItems = [
-    { id: 's1', filename: '/images/portrait_black_white_1776816332419.png', description: t.portrait, resolution: 'High Res' },
-    { id: 's2', filename: '/images/lifestyle_fashion_1776816346376.png', description: t.lifestyle, resolution: 'High Res' },
-    { id: 's3', filename: '/images/dramatic_theater_1776816359304.png', description: t.theater, resolution: 'High Res' },
-    { id: 's4', filename: '/images/minimalist_landscape_1776816375040.png', description: t.landscape, resolution: 'High Res' },
+    { id: 's1', filename: '/images/portrait_black_white_1776816332419.png', description: t.portrait, resolution: 'High Res', category: 'Retrato' },
+    { id: 's2', filename: '/images/lifestyle_fashion_1776816346376.png', description: t.lifestyle, resolution: 'High Res', category: 'General' },
+    { id: 's3', filename: '/images/dramatic_theater_1776816359304.png', description: t.theater, resolution: 'High Res', category: 'Eventos' },
+    { id: 's4', filename: '/images/minimalist_landscape_1776816375040.png', description: t.landscape, resolution: 'High Res', category: 'Paisaje' },
   ];
 
   useEffect(() => {
@@ -31,10 +32,37 @@ const Gallery = () => {
     }
   };
 
+  const uniqueCategories = ['Todas', ...new Set(images.map(img => img.category || 'General'))];
+
+  const filteredImages = selectedCategory === 'Todas' 
+    ? images 
+    : images.filter(img => (img.category || 'General') === selectedCategory);
+
   return (
     <section id="gallery" className="gallery-section container">
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '30px' }}>
+        {uniqueCategories.map(cat => (
+          <button 
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            style={{
+              background: selectedCategory === cat ? 'var(--accent)' : 'transparent',
+              color: selectedCategory === cat ? 'white' : 'var(--text)',
+              border: `1px solid ${selectedCategory === cat ? 'var(--accent)' : 'rgba(255,255,255,0.2)'}`,
+              padding: '8px 20px',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              fontSize: '0.9rem'
+            }}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       <div className="gallery-grid">
-        {images.map((item, index) => (
+        {filteredImages.map((item, index) => (
           <div key={item.id} className={`gallery-item ${index % 3 === 0 ? 'span-12' : index % 2 === 0 ? 'span-8' : 'span-4'}`}>
             <img 
               src={item.publicUrl || item.filename} 

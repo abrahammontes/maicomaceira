@@ -8,11 +8,13 @@ const AdminPanel = () => {
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState('');
   const [resolution, setResolution] = useState('High Res');
+  const [category, setCategory] = useState('General');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [editingImageId, setEditingImageId] = useState(null);
   const [editDescription, setEditDescription] = useState('');
+  const [editCategory, setEditCategory] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,10 +56,11 @@ const AdminPanel = () => {
 
     setLoading(true);
     try {
-      await apiService.uploadImage(file, description, resolution);
+      await apiService.uploadImage(file, description, resolution, category);
       setMessage('Imagen subida con éxito');
       setFile(null);
       setDescription('');
+      setCategory('General');
       fetchImages();
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
@@ -78,18 +81,20 @@ const AdminPanel = () => {
   const handleEditClick = (img) => {
     setEditingImageId(img.id);
     setEditDescription(img.description || '');
+    setEditCategory(img.category || 'General');
   };
 
   const handleCancelEdit = () => {
     setEditingImageId(null);
     setEditDescription('');
+    setEditCategory('');
   };
 
   const handleSaveEdit = async (id) => {
     setLoading(true);
     try {
-      await apiService.updateImageDescription(id, editDescription);
-      setMessage('Descripción actualizada');
+      await apiService.updateImageDetails(id, editDescription, editCategory);
+      setMessage('Detalles actualizados');
       setEditingImageId(null);
       fetchImages();
       setTimeout(() => setMessage(''), 3000);
@@ -186,6 +191,24 @@ const AdminPanel = () => {
               </select>
             </div>
 
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '10px', fontSize: '0.8rem' }}>CATEGORÍA</label>
+              <input 
+                type="text" 
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                placeholder="Ej. Retrato, Paisaje, Eventos..."
+                style={{ 
+                  width: '100%', 
+                  padding: '12px', 
+                  background: 'rgba(255,255,255,0.05)', 
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  borderRadius: '10px',
+                  color: 'var(--text)'
+                }}
+              />
+            </div>
+
             <div style={{ marginBottom: '25px' }}>
               <label style={{ display: 'block', marginBottom: '10px', fontSize: '0.8rem' }}>DESCRIPCIÓN</label>
               <textarea 
@@ -251,7 +274,14 @@ const AdminPanel = () => {
                       value={editDescription}
                       onChange={(e) => setEditDescription(e.target.value)}
                       placeholder="Nueva descripción..."
-                      style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '5px', padding: '10px', resize: 'none', marginBottom: '10px', fontSize: '0.8rem' }}
+                      style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '5px', padding: '10px', resize: 'none', marginBottom: '5px', fontSize: '0.8rem' }}
+                    />
+                    <input 
+                      type="text"
+                      value={editCategory}
+                      onChange={(e) => setEditCategory(e.target.value)}
+                      placeholder="Categoría..."
+                      style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '5px', padding: '10px', marginBottom: '10px', fontSize: '0.8rem' }}
                     />
                     <div style={{ display: 'flex', gap: '10px' }}>
                       <button onClick={() => handleSaveEdit(img.id)} style={{ flex: 1, background: '#4ade80', color: 'black', border: 'none', borderRadius: '5px', padding: '8px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }} title="Guardar">
@@ -293,7 +323,10 @@ const AdminPanel = () => {
                       flexDirection: 'column',
                       gap: '4px'
                     }}>
-                      <div style={{ fontWeight: 'bold' }}>{img.resolution}</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontWeight: 'bold' }}>{img.resolution}</div>
+                        <div style={{ fontSize: '0.65rem', background: 'rgba(74, 222, 128, 0.2)', color: '#4ade80', padding: '2px 6px', borderRadius: '4px' }}>{img.category || 'General'}</div>
+                      </div>
                       <div style={{ opacity: 0.8, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {img.description || 'Sin descripción'}
                       </div>

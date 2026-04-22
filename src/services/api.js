@@ -55,7 +55,7 @@ export const apiService = {
     }));
   },
 
-  async uploadImage(file, description, resolution) {
+  async uploadImage(file, description, resolution, category = 'General') {
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random()}.${fileExt}`;
     const filePath = `${fileName}`;
@@ -74,7 +74,8 @@ export const apiService = {
         { 
           filename: filePath, 
           description, 
-          resolution 
+          resolution,
+          category
         }
       ])
       .select();
@@ -101,10 +102,10 @@ export const apiService = {
     return { success: true };
   },
 
-  async updateImageDescription(id, description) {
+  async updateImageDetails(id, description, category) {
     const { data, error } = await supabase
       .from('images')
-      .update({ description })
+      .update({ description, category })
       .match({ id })
       .select();
 
