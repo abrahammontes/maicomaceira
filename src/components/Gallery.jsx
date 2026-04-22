@@ -8,6 +8,7 @@ const Gallery = () => {
   const t = translations[lang].gallery.items;
   const [images, setImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('Todas');
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const staticItems = [
     { id: 's1', filename: '/images/portrait_black_white_1776816332419.png', description: t.portrait, resolution: 'High Res', category: 'Retrato' },
@@ -64,7 +65,11 @@ const Gallery = () => {
 
       <div className="gallery-grid">
         {filteredImages.map((item) => (
-          <div key={item.id} className="gallery-item">
+          <div 
+            key={item.id} 
+            className="gallery-item"
+            onClick={() => setSelectedImage(item)}
+          >
             <img 
               src={item.publicUrl || item.filename} 
               alt={item.description} 
@@ -77,6 +82,55 @@ const Gallery = () => {
           </div>
         ))}
       </div>
+
+      {selectedImage && (
+        <div 
+          onClick={() => setSelectedImage(null)}
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, width: '100vw', height: '100vh',
+            background: 'rgba(0,0,0,0.92)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            zIndex: 9999,
+            padding: '40px',
+            cursor: 'zoom-out',
+            animation: 'fadeInUp 0.3s ease'
+          }}
+        >
+          <button 
+            onClick={() => setSelectedImage(null)}
+            style={{
+              position: 'absolute', top: '20px', right: '30px',
+              background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.7)',
+              fontSize: '3rem', cursor: 'pointer', transition: 'color 0.2s',
+              lineHeight: 1
+            }}
+            onMouseOver={(e) => e.target.style.color = '#fff'}
+            onMouseOut={(e) => e.target.style.color = 'rgba(255,255,255,0.7)'}
+          >
+            &times;
+          </button>
+          <img 
+            src={selectedImage.publicUrl || selectedImage.filename} 
+            alt={selectedImage.description}
+            style={{
+              maxWidth: '100%', maxHeight: '100%',
+              objectFit: 'contain',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+              borderRadius: '4px',
+              cursor: 'default'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div style={{
+            position: 'absolute', bottom: '30px', left: '0', width: '100%',
+            textAlign: 'center', color: 'white', textShadow: '0 2px 10px rgba(0,0,0,0.8)'
+          }}>
+            <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 500 }}>{selectedImage.description}</h3>
+            <p style={{ margin: '8px 0 0', opacity: 0.8, fontSize: '0.9rem', letterSpacing: '1px' }}>{selectedImage.resolution}</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
